@@ -1,12 +1,12 @@
-from typing import List, Optional, Dict
+from typing import Optional, Set, Dict, Iterable
 
 from .abstract import ConstraintAbstract
 
 
 class UniqueConstraint(ConstraintAbstract):
-    def __init__(self, labels: List[str], properties: List[str], *, name: str = None):
-        self.labels: List[str] = labels
-        self.properties: List[str] = properties
+    def __init__(self, labels: Iterable[str], properties: Iterable[str], *, name: str = None):
+        self.labels: Set[str] = set(labels)
+        self.properties: Set[str] = set(properties)
         self.name: Optional[str] = name
 
     def get_create_command(self) -> str:  # TODO
@@ -23,4 +23,3 @@ class UniqueConstraint(ConstraintAbstract):
     @classmethod  # TODO
     def from_raw(cls, data: Dict) -> 'ConstraintAbstract':
         pass
-
