@@ -73,4 +73,4 @@ def test_get_create_command_from_nonempty_set():
     b = DummyConstraint(3, 4)
     s = ConstraintSet([a, b])
 
-    assert s.get_create_commands() == [a, b]
+    assert s.get_create_commands() == [a.get_create_command(), b.get_create_command()]
