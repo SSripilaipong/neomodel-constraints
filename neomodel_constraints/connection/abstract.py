@@ -3,6 +3,10 @@ from abc import ABC, abstractmethod
 
 class ConnectionAbstract(ABC):
     @abstractmethod
+    def is_connected(self):
+        pass
+
+    @abstractmethod
     def connect(self):
         pass
 
