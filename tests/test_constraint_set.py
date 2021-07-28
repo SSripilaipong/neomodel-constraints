@@ -11,6 +11,9 @@ class DummyConstraint(ConstraintAbstract):
     def get_create_command(self) -> str:
         return f'AAAA {self.a} BBBB {self.b}'
 
+    def get_drop_command(self) -> str:
+        return f'CCCC {self.a} DDDD {self.b}'
+
     def _equals(self, other: 'ConstraintAbstract') -> bool:
         if not isinstance(other, self.__class__):
             return False
@@ -74,3 +77,18 @@ def test_get_create_command_from_nonempty_set():
     s = ConstraintSet([a, b])
 
     assert s.get_create_commands() == [a.get_create_command(), b.get_create_command()]
+
+
+@pytest.mark.unit
+def test_get_drop_command_from_empty_set():
+    s = ConstraintSet([])
+    assert s.get_drop_commands() == []
+
+
+@pytest.mark.unit
+def test_get_drop_command_from_nonempty_set():
+    a = DummyConstraint(1, 2)
+    b = DummyConstraint(3, 4)
+    s = ConstraintSet([a, b])
+
+    assert s.get_drop_commands() == [a.get_drop_command(), b.get_drop_command()]

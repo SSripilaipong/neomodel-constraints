@@ -14,6 +14,9 @@ class DummyConstraint(ConstraintAbstract):
     def get_create_command(self) -> str:
         pass
 
+    def get_drop_command(self) -> str:
+        pass
+
     def _equals(self, other: 'ConstraintAbstract') -> bool:
         pass
 

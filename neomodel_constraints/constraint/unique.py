@@ -14,6 +14,11 @@ class UniqueConstraint(ConstraintAbstract):
         CREATE CONSTRAINT {NAME} ON (n:{LABELS}) ASSERT n.{PROPERTIES} IS UNIQUE
         """
 
+    def get_drop_command(self) -> str:  # TODO
+        """
+        DROP CONSTRAINT {NAME}
+        """
+
     def _equals(self, other: 'ConstraintAbstract') -> bool:  # TODO
         pass
 

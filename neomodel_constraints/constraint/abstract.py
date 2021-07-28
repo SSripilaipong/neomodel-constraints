@@ -8,6 +8,10 @@ class ConstraintAbstract(ABC):
         pass
 
     @abstractmethod
+    def get_drop_command(self) -> str:
+        pass
+
+    @abstractmethod
     def _equals(self, other: 'ConstraintAbstract') -> bool:
         pass
 

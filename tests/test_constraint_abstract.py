@@ -11,6 +11,9 @@ class DummyConstraint1(ConstraintAbstract):
     def get_create_command(self) -> str:  # not used
         return ''
 
+    def get_drop_command(self) -> str:  # not used
+        return ''
+
     def _equals(self, other: 'ConstraintAbstract') -> bool:  # not used
         return False
 
@@ -27,6 +30,9 @@ class DummyConstraint2(ConstraintAbstract):
         self.data_hash: int = data_hash
 
     def get_create_command(self) -> str:  # not used
+        return ''
+
+    def get_drop_command(self) -> str:  # not used
         return ''
 
     def _equals(self, other: 'ConstraintAbstract') -> bool:  # not used
