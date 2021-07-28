@@ -78,10 +78,10 @@ def test_extract_raw_constraints():
     extractor = NeomodelExtractor('tests.test_extractor.models')
     raw_constraints: List[ExtractedConstraintRecord] = extractor.extract_raw(UniqueIdAndUniqueString)
 
-    expected = {
+    expected = [
         ExtractedConstraintRecord(type_='UNIQUE_INDEX', labels=['UniqueIdAndUniqueString'], name='u1'),
         ExtractedConstraintRecord(type_='UNIQUE_INDEX', labels=['UniqueIdAndUniqueString'], name='u2'),
-    }
+    ]
 
     assert len(raw_constraints) == len(expected)
     for e in expected:
