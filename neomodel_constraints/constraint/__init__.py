@@ -1,2 +1,2 @@
-from .abstract import ConstraintAbstract
+from .abstract import ConstraintAbstract, TypeMapperAbstract
 from .set import ConstraintSet

@@ -1,3 +1,4 @@
+from typing import Type
 from abc import ABC, abstractmethod
 
 
@@ -19,3 +20,9 @@ class ConstraintAbstract(ABC):
 
     def __hash__(self) -> int:
         return hash(self.__class__) + self._get_data_hash()
+
+
+class TypeMapperAbstract(ABC):
+    @abstractmethod
+    def map(self, type_: str) -> Type[ConstraintAbstract]:
+        pass
