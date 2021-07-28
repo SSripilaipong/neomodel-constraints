@@ -11,7 +11,7 @@ class ConnectionAbstract(ABC):
         pass
 
     @abstractmethod
-    def execute(self):
+    def execute(self, command: str):
         pass
 
     @abstractmethod
