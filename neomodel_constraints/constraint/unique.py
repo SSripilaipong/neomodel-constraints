@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Optional, Dict
 
 from .abstract import ConstraintAbstract
 
@@ -19,3 +19,8 @@ class UniqueConstraint(ConstraintAbstract):
 
     def _get_data_hash(self) -> int:  # TODO
         pass
+
+    @classmethod  # TODO
+    def from_raw(cls, data: Dict) -> 'ConstraintAbstract':
+        pass
+

@@ -1,3 +1,4 @@
+from typing import Dict
 import pytest
 from neomodel_constraints.constraint import ConstraintSet, ConstraintAbstract
 
@@ -21,6 +22,10 @@ class DummyConstraint(ConstraintAbstract):
 
     def _get_data_hash(self) -> int:
         return hash(self.a)*2**3 + hash(self.b)*3**3
+
+    @classmethod
+    def from_raw(cls, data: Dict) -> 'ConstraintAbstract':
+        pass
 
 
 @pytest.mark.unit

@@ -1,4 +1,4 @@
-from typing import Type
+from typing import Type, Dict
 from abc import ABC, abstractmethod
 
 
@@ -9,6 +9,11 @@ class ConstraintAbstract(ABC):
 
     @abstractmethod
     def _equals(self, other: 'ConstraintAbstract') -> bool:
+        pass
+
+    @classmethod
+    @abstractmethod
+    def from_raw(cls, data: Dict) -> 'ConstraintAbstract':
         pass
 
     @abstractmethod
