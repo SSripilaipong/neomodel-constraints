@@ -1,3 +1,4 @@
+from typing import List, Dict
 from abc import ABC, abstractmethod
 
 
@@ -11,7 +12,7 @@ class ConnectionAbstract(ABC):
         pass
 
     @abstractmethod
-    def execute(self, command: str):
+    def execute(self, command: str) -> List[Dict]:
         pass
 
     @abstractmethod
@@ -24,3 +25,11 @@ class ConnectionAbstract(ABC):
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.close()
+
+
+class DBConnectionError(Exception):
+    pass
+
+
+class DBExecutionError(Exception):
+    pass
