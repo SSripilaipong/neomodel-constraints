@@ -9,7 +9,7 @@ class DummyConstraint(ConstraintAbstract):
     def get_create_command(self) -> str:
         return f'AAAA {self.a} BBBB {self.b}'
 
-    def __eq__(self, other: 'ConstraintAbstract') -> bool:
+    def _equals(self, other: 'ConstraintAbstract') -> bool:
         if not isinstance(other, self.__class__):
             return False
 

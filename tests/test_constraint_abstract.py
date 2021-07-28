@@ -8,7 +8,7 @@ class DummyConstraint1(ConstraintAbstract):
     def get_create_command(self) -> str:  # not used
         return ''
 
-    def __eq__(self, other: 'ConstraintAbstract') -> bool:  # not used
+    def _equals(self, other: 'ConstraintAbstract') -> bool:  # not used
         return False
 
     def _get_data_hash(self) -> int:
@@ -22,7 +22,7 @@ class DummyConstraint2(ConstraintAbstract):
     def get_create_command(self) -> str:  # not used
         return ''
 
-    def __eq__(self, other: 'ConstraintAbstract') -> bool:  # not used
+    def _equals(self, other: 'ConstraintAbstract') -> bool:  # not used
         return False
 
     def _get_data_hash(self) -> int:
