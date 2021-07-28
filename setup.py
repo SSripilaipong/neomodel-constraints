@@ -5,13 +5,13 @@ from setuptools import setup
 with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
-NAME = 'neomodel_constraints'
+NAME = 'neomodel-constraints'
 VERSION = '0.0.1'
-URL = 'https://github.com/SSripilaipong/neomodel_constraints'
+URL = 'https://github.com/SSripilaipong/neomodel-constraints'
 LICENSE = 'MIT'
 AUTHOR = 'SSripilaipong'
 EMAIL = 'SHSnail@mail.com'
-
+CONSOLE_SCRIPT = 'nmcon=neomodel_constraints.cli:main'
 
 setup(
     name=NAME,
@@ -25,5 +25,8 @@ setup(
     long_description=None,
     python_requires='>=3.6',
     install_requires=requirements,
-    classifiers=None,
+    classifiers=[],
+    entry_points={
+        'console_scripts': [CONSOLE_SCRIPT],
+    }
 )
