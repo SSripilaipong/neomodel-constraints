@@ -139,3 +139,6 @@ cython_debug/
 
 # editors
 .idea/
+
+# tmp notebook
+tmp_*.ipynb
