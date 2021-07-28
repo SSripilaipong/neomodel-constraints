@@ -7,7 +7,7 @@ class ConstraintAbstract(ABC):
         pass
 
     @abstractmethod
-    def __eq__(self, other: 'Constraint') -> bool:
+    def __eq__(self, other: 'ConstraintAbstract') -> bool:
         pass
 
     @abstractmethod
