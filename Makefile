@@ -1,5 +1,5 @@
-test:
-	PYTHONPATH=. pytest
+unittest:
+	PYTHONPATH=. pytest -m unit
 
 release:
 	python setup.py sdist
