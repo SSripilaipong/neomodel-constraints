@@ -1,3 +1,4 @@
+import pytest
 from neomodel_constraints.constraint import ConstraintAbstract
 
 
@@ -33,36 +34,42 @@ class DummyConstraint11(DummyConstraint1):
     pass
 
 
+@pytest.mark.unit
 def test_hash_same_class_with_same_data_hash():
     c1 = DummyConstraint1(1)
     c2 = DummyConstraint1(1)
     assert hash(c1) == hash(c2)
 
 
+@pytest.mark.unit
 def test_hash_same_class_with_different_data_hash():
     c1 = DummyConstraint1(1)
     c2 = DummyConstraint1(2)
     assert hash(c1) != hash(c2)
 
 
+@pytest.mark.unit
 def test_hash_different_class_with_same_data_hash():
     c1 = DummyConstraint1(1)
     c2 = DummyConstraint2(1)
     assert hash(c1) != hash(c2)
 
 
+@pytest.mark.unit
 def test_hash_different_class_with_different_data_hash():
     c1 = DummyConstraint1(1)
     c2 = DummyConstraint2(2)
     assert hash(c1) != hash(c2)
 
 
+@pytest.mark.unit
 def test_hash_subclass_with_same_data_hash():
     c1 = DummyConstraint1(1)
     c2 = DummyConstraint11(1)
     assert hash(c1) != hash(c2)
 
 
+@pytest.mark.unit
 def test_hash_subclass_with_different_data_hash():
     c1 = DummyConstraint1(1)
     c2 = DummyConstraint11(2)
