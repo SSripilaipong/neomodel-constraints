@@ -12,7 +12,7 @@ class DummyConnection(ConnectionAbstract):
         self.results: Deque[R] = deque(results)
         self._connected = False
 
-    def execute(self) -> R:
+    def execute(self, command: str) -> R:
         return self.results.popleft()
 
     def close(self):
