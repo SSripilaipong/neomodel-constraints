@@ -7,6 +7,17 @@ from neomodel_constraints import (
 from neomodel_constraints.constraint import TypeMapperAbstract
 
 
+raw_columns_rename = {
+    'id': 'id_',
+    'ownedIndexId': 'owned_index_id',
+    'entityType': 'entity_type',
+    'labelsOrTypes': 'labels_or_types',
+    'name': 'name',
+    'type': 'type_',
+    'properties': 'properties',
+}
+
+
 class DummyConstraint(ConstraintAbstract):
     def __init__(self, input_data):
         self.input_data = input_data
@@ -17,8 +28,15 @@ class DummyConstraint(ConstraintAbstract):
     def get_drop_command(self) -> str:
         pass
 
+    def __repr__(self):
+        return f'DummyConstraint({self.input_data})'
+
     def _equals(self, other: 'ConstraintAbstract') -> bool:
-        pass
+        if not isinstance(other, DummyConstraint):
+            return False
+        if self.input_data == other.input_data:
+            return True
+        return False
 
     def _get_data_hash(self) -> int:
         return 1
@@ -36,7 +54,7 @@ class DummyTypeMapper(TypeMapperAbstract):
 
 
 @pytest.mark.unit
-def test_fetch_raw_data():
+def test_fetch_dummy_raw_data():
     e = {
         'id': 123,
         'ownedIndexId': 456,
@@ -79,7 +97,9 @@ def test_convert_uniqueness_records_to_constraint_set():
     raw = [Neo4jConstraintQueryRecord(**a), Neo4jConstraintQueryRecord(**b)]
     result = f._convert_constraints(raw)
 
-    assert result == ConstraintSet({DummyConstraint(a), DummyConstraint(b)})
+    a_renamed = {raw_columns_rename[k]: v for k, v in a.items()}
+    b_renamed = {raw_columns_rename[k]: v for k, v in b.items()}
+    assert result == ConstraintSet({DummyConstraint(a_renamed), DummyConstraint(b_renamed)})
 
 
 @pytest.mark.unit
@@ -104,4 +124,7 @@ def test_fetch():
     }
     f = ConstraintsFetcher(DummyConnection([[a, b]]), DummyTypeMapper())
     result = f.fetch()
-    assert result == ConstraintSet({DummyConstraint(a), DummyConstraint(b)})
+
+    a_renamed = {raw_columns_rename[k]: v for k, v in a.items()}
+    b_renamed = {raw_columns_rename[k]: v for k, v in b.items()}
+    assert result == ConstraintSet({DummyConstraint(a_renamed), DummyConstraint(b_renamed)})
