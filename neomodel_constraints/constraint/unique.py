@@ -1,3 +1,4 @@
+import uuid
 from typing import Optional, Set, Dict, Iterable
 
 from .abstract import ConstraintAbstract
@@ -10,16 +11,21 @@ class UniqueConstraint(ConstraintAbstract):
         self.name: Optional[str] = name
 
     def get_create_command(self) -> str:  # TODO
-        """
-        CREATE CONSTRAINT {NAME} ON (n:{LABELS}) ASSERT n.{PROPERTIES} IS UNIQUE
-        """
+        if len(self.properties) != 1:
+            raise NotImplementedError('Currently only 1 property is supported.')
+
+        prop = list(self.properties)[0]
+        labels_str = ':'.join(list(self.labels))
+        name = self.name if self.name else 'cstr_unique_' + uuid.uuid4().hex
+
+        return f'CREATE CONSTRAINT {name} ON (n:{labels_str}) ASSERT n.{prop} IS UNIQUE'
 
     def get_drop_command(self) -> str:  # TODO
-        """
-        DROP CONSTRAINT {NAME}
-        """
+        if self.name is None:
+            raise ValueError('Constraint must have a name provided in order to be dropped.')
+        return f'DROP CONSTRAINT {self.name}'
 
-    def _equals(self, other: 'ConstraintAbstract') -> bool:
+    def _equals(self, other: ConstraintAbstract) -> bool:
         if not isinstance(other, self.__class__):
             return False
         return self.labels == other.labels and self.properties == other.properties
@@ -31,5 +37,12 @@ class UniqueConstraint(ConstraintAbstract):
         return labels_hash*2**3 + props_hash*3**3
 
     @classmethod  # TODO
-    def from_raw(cls, data: Dict) -> 'ConstraintAbstract':
-        pass
+    def from_raw(cls, data: Dict) -> 'UniqueConstraint':
+        required = {'labels', 'properties'}
+        optional = {'name'}
+        keys = set(data.keys())
+
+        assert keys & required == required
+        assert keys & (required | optional) == keys
+
+        return UniqueConstraint(**data)

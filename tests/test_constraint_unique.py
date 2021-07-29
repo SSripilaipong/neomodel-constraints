@@ -175,13 +175,13 @@ def test_get_create_command_two_labels():
     assert d['T1'] == d['T2']
 
     ls = d['L']
-    assert ls[0] == ':' and set(ls.lstrip(':').split()) == {'A', 'Chain', 'C841N'}
+    assert ls[0] == ':' and set(ls.lstrip(':').split(':')) == {'A', 'Chain', 'C841N'}
 
 
 @pytest.mark.unit
 def test_get_drop_command():
     u = UniqueConstraint(['A'], ['y'], name='my_constraint_1234')
-    cmd = u.get_create_command()
+    cmd = u.get_drop_command()
     assert cmd
 
     expected_pattern = r" *DROP +CONSTRAINT +(?P<NAME>[^ ]+) *"
