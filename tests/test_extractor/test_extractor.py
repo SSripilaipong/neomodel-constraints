@@ -130,7 +130,7 @@ def test_convert_unique_index_constraint_record():
     record = ExtractedConstraintRecord(type_='UNIQUE_INDEX', labels=['UniqueIdAndUniqueString'], name='u1')
     constraints = extractor.convert_constraints(record)
 
-    raw = {'labels': {'UniqueIdAndUniqueString'}, 'properties': ['u1']}
+    raw = {'labels_or_types': {'UniqueIdAndUniqueString'}, 'properties': ['u1']}
     assert constraints == ConstraintSet({DummyConstraint(raw)})
 
 
@@ -140,11 +140,11 @@ def test_extract_module():
     constraints = extractor.extract()
 
     expected = ConstraintSet({
-        DummyConstraint({'labels': {'UniqueIdAndUniqueString'}, 'properties': ['u1']}),
-        DummyConstraint({'labels': {'UniqueIdAndUniqueString'}, 'properties': ['u2']}),
-        DummyConstraint({'labels': {'UniqueIdWithRelation'}, 'properties': ['u1']}),
-        DummyConstraint({'labels': {'SubclassWithUniqueString', 'UniqueIdWithRelation'}, 'properties': ['u1']}),
-        DummyConstraint({'labels': {'SubclassWithUniqueString', 'UniqueIdWithRelation'}, 'properties': ['u2']}),
+        DummyConstraint({'labels_or_types': {'UniqueIdAndUniqueString'}, 'properties': ['u1']}),
+        DummyConstraint({'labels_or_types': {'UniqueIdAndUniqueString'}, 'properties': ['u2']}),
+        DummyConstraint({'labels_or_types': {'UniqueIdWithRelation'}, 'properties': ['u1']}),
+        DummyConstraint({'labels_or_types': {'SubclassWithUniqueString', 'UniqueIdWithRelation'}, 'properties': ['u1']}),
+        DummyConstraint({'labels_or_types': {'SubclassWithUniqueString', 'UniqueIdWithRelation'}, 'properties': ['u2']}),
     })
 
     assert constraints == expected
