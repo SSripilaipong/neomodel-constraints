@@ -1,3 +1,6 @@
+import os
+import sys
+
 import click
 
 from neomodel_constraints.extractor import NeomodelExtractor
@@ -16,8 +19,11 @@ def main(): ...
 def extract(path, cypher_create_all):
     type_mapper = Neo4jConstraintTypeMapper()
 
+    sys.path.insert(0, os.getcwd())
     extractor = NeomodelExtractor(path, type_mapper)
     constraints = extractor.extract()
+    sys.path = sys.path[1:]
+
     if cypher_create_all:
         click.echo(';\n'.join(constraints.get_create_commands())+';')
     else:
