@@ -10,6 +10,10 @@ class UniqueConstraint(ConstraintAbstract):
         self.properties: Set[str] = set(properties)
         self.name: Optional[str] = name
 
+    def __repr__(self):
+        name_expr = '' if not self.name else f', name={repr(self.name)}'
+        return f'{self.__class__.__name__}(labels={repr(self.labels)}, properties={repr(self.properties)}{name_expr})'
+
     def get_create_command(self, *, name=None) -> str:
         if len(self.properties) != 1:
             raise NotImplementedError('Currently only 1 property is supported.')
