@@ -10,7 +10,7 @@ class UniqueConstraint(ConstraintAbstract):
         self.properties: Set[str] = set(properties)
         self.name: Optional[str] = name
 
-    def get_create_command(self) -> str:  # TODO
+    def get_create_command(self) -> str:
         if len(self.properties) != 1:
             raise NotImplementedError('Currently only 1 property is supported.')
 
@@ -20,7 +20,7 @@ class UniqueConstraint(ConstraintAbstract):
 
         return f'CREATE CONSTRAINT {name} ON (n:{labels_str}) ASSERT n.{prop} IS UNIQUE'
 
-    def get_drop_command(self) -> str:  # TODO
+    def get_drop_command(self) -> str:
         if self.name is None:
             raise ValueError('Constraint must have a name provided in order to be dropped.')
         return f'DROP CONSTRAINT {self.name}'
@@ -36,7 +36,7 @@ class UniqueConstraint(ConstraintAbstract):
 
         return labels_hash*2**3 + props_hash*3**3
 
-    @classmethod  # TODO
+    @classmethod
     def from_raw(cls, data: Dict) -> 'UniqueConstraint':
         required = {'labels', 'properties'}
         optional = {'name'}
