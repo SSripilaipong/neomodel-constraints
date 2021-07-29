@@ -49,12 +49,5 @@ class UniqueConstraint(ConstraintAbstract):
 
     @classmethod
     def from_raw(cls, data: Dict) -> 'UniqueConstraint':
-        required = {'labels', 'properties'}
-        optional = {'name'}
-        keys = set(data.keys())
-
-        assert keys.issuperset(required)
-        keys_filtered = keys & (required | optional)
-        data_filtered = {k: v for k, v in data.items() if k in keys_filtered}
-
-        return UniqueConstraint(**data_filtered)
+        return UniqueConstraint(labels=data['labels_or_types'], properties=data['properties'],
+                                name=data.get('name', None))
