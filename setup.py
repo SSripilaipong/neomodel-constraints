@@ -6,7 +6,7 @@ with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
 NAME = 'neomodel-constraints'
-VERSION = '0.0.2'
+VERSION = '0.0.6'
 URL = 'https://github.com/SSripilaipong/neomodel-constraints'
 LICENSE = 'MIT'
 AUTHOR = 'SSripilaipong'
@@ -16,7 +16,7 @@ CONSOLE_SCRIPT = 'nmcon=neomodel_constraints.cli:main'
 setup(
     name=NAME,
     version=VERSION,
-    packages=['neomodel_constraints'],
+    packages=setuptools.find_packages(),
     url=URL,
     license=LICENSE,
     author=AUTHOR,
