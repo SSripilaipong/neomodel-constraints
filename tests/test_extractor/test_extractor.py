@@ -1,15 +1,51 @@
-from typing import List
+from typing import List, Dict, Type
 import pytest
 
 from neomodel import UniqueIdProperty, StringProperty
 
-from neomodel_constraints import NeomodelExtractor, ConstraintSet, UniqueConstraint
+from neomodel_constraints import NeomodelExtractor, ConstraintSet, UniqueConstraint, ConstraintAbstract
+from neomodel_constraints.constraint import TypeMapperAbstract
 from neomodel_constraints.extractor.data import ExtractedConstraintRecord
+
+
+class DummyConstraint(ConstraintAbstract):
+    def __init__(self, input_data):
+        self.input_data = input_data
+
+    def get_create_command(self) -> str:
+        pass
+
+    def get_drop_command(self) -> str:
+        pass
+
+    def __repr__(self):
+        return f'DummyConstraint({self.input_data})'
+
+    def _equals(self, other: 'ConstraintAbstract') -> bool:
+        if not isinstance(other, DummyConstraint):
+            return False
+        if self.input_data == other.input_data:
+            return True
+        return False
+
+    def _get_data_hash(self) -> int:
+        return 1
+
+    @classmethod
+    def from_raw(cls, data: Dict) -> 'ConstraintAbstract':
+        return DummyConstraint(input_data=data)
+
+
+class DummyTypeMapper(TypeMapperAbstract):
+    def map(self, type_: str) -> Type[ConstraintAbstract]:
+        if type_ == 'UNIQUENESS':
+            return DummyConstraint
+        raise NotImplementedError()
 
 
 @pytest.mark.unit
 def test_list_all_models_in_module():
-    extractor = NeomodelExtractor('tests.test_extractor.models')
+    extractor = NeomodelExtractor('tests.test_extractor.models', DummyTypeMapper())
     models = extractor.get_models()
     expected = {'UniqueIdAndUniqueString', 'NoUnique', 'UniqueIdWithRelation',
                 'SubclassWithUniqueString', 'NoUniqueAlone'}
@@ -20,7 +56,7 @@ def test_list_all_models_in_module():
 def test_list_props():
     from tests.test_extractor.models.f1 import UniqueIdAndUniqueString
 
-    extractor = NeomodelExtractor('tests.test_extractor.models')
+    extractor = NeomodelExtractor('tests.test_extractor.models', DummyTypeMapper())
     properties = extractor.list_properties(UniqueIdAndUniqueString)
 
     assert set(properties) == {'u1', 'u2', 'x1'}
@@ -38,7 +74,7 @@ def test_list_props():
 def test_list_props_of_subclass():
     from tests.test_extractor.models.f2 import SubclassWithUniqueString
 
-    extractor = NeomodelExtractor('tests.test_extractor.models')
+    extractor = NeomodelExtractor('tests.test_extractor.models', DummyTypeMapper())
     properties = extractor.list_properties(SubclassWithUniqueString)
 
     assert set(properties) == {'u1', 'u2', 'x1'}
@@ -56,7 +92,7 @@ def test_list_props_of_subclass():
 def test_list_labels():
     from tests.test_extractor.models.f1 import UniqueIdAndUniqueString
 
-    extractor = NeomodelExtractor('tests.test_extractor.models')
+    extractor = NeomodelExtractor('tests.test_extractor.models', DummyTypeMapper())
     labels = extractor.list_labels(UniqueIdAndUniqueString)
     assert labels == {'UniqueIdAndUniqueString'}
 
@@ -65,7 +101,7 @@ def test_list_labels():
 def test_list_labels_of_subclass():
     from tests.test_extractor.models.f2 import SubclassWithUniqueString
 
-    extractor = NeomodelExtractor('tests.test_extractor.models')
+    extractor = NeomodelExtractor('tests.test_extractor.models', DummyTypeMapper())
     labels = extractor.list_labels(SubclassWithUniqueString)
 
     assert labels == {'SubclassWithUniqueString', 'UniqueIdWithRelation'}
@@ -75,7 +111,7 @@ def test_list_labels_of_subclass():
 def test_extract_raw_constraints():
     from tests.test_extractor.models.f1 import UniqueIdAndUniqueString
 
-    extractor = NeomodelExtractor('tests.test_extractor.models')
+    extractor = NeomodelExtractor('tests.test_extractor.models', DummyTypeMapper())
     raw_constraints: List[ExtractedConstraintRecord] = extractor.extract_raw(UniqueIdAndUniqueString)
 
     expected = [
@@ -90,23 +126,25 @@ def test_extract_raw_constraints():
 
 @pytest.mark.unit
 def test_convert_unique_index_constraint_record():
-    extractor = NeomodelExtractor('tests.test_extractor.models')
+    extractor = NeomodelExtractor('tests.test_extractor.models', DummyTypeMapper())
     record = ExtractedConstraintRecord(type_='UNIQUE_INDEX', labels=['UniqueIdAndUniqueString'], name='u1')
     constraints = extractor.convert_constraints(record)
-    assert constraints == ConstraintSet({UniqueConstraint({'UniqueIdAndUniqueString'}, {'u1'})})
+
+    raw = {'labels': {'UniqueIdAndUniqueString'}, 'properties': ['u1']}
+    assert constraints == ConstraintSet({DummyConstraint(raw)})
 
 
 @pytest.mark.unit
 def test_extract_module():
-    extractor = NeomodelExtractor('tests.test_extractor.models')
+    extractor = NeomodelExtractor('tests.test_extractor.models', DummyTypeMapper())
     constraints = extractor.extract()
 
     expected = ConstraintSet({
-        UniqueConstraint({'UniqueIdAndUniqueString'}, {'u1'}),
-        UniqueConstraint({'UniqueIdAndUniqueString'}, {'u2'}),
-        UniqueConstraint({'UniqueIdWithRelation'}, {'u1'}),
-        UniqueConstraint({'SubclassWithUniqueString', 'UniqueIdWithRelation'}, {'u1'}),
-        UniqueConstraint({'SubclassWithUniqueString', 'UniqueIdWithRelation'}, {'u2'}),
+        DummyConstraint({'labels': {'UniqueIdAndUniqueString'}, 'properties': ['u1']}),
+        DummyConstraint({'labels': {'UniqueIdAndUniqueString'}, 'properties': ['u2']}),
+        DummyConstraint({'labels': {'UniqueIdWithRelation'}, 'properties': ['u1']}),
+        DummyConstraint({'labels': {'SubclassWithUniqueString', 'UniqueIdWithRelation'}, 'properties': ['u1']}),
+        DummyConstraint({'labels': {'SubclassWithUniqueString', 'UniqueIdWithRelation'}, 'properties': ['u2']}),
     })
 
     assert constraints == expected

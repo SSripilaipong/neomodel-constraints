@@ -1,4 +1,4 @@
-from typing import List
+from typing import Set
 from enum import Enum
 
 from pydantic import BaseModel
@@ -10,5 +10,5 @@ class ConstraintType(str, Enum):
 
 class ExtractedConstraintRecord(BaseModel):
     type_: ConstraintType
-    labels: List[str]
+    labels: Set[str]
     name: str
