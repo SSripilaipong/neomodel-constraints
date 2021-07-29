@@ -190,3 +190,9 @@ def test_get_drop_command():
 
     d = match.groupdict()
     assert d['NAME'] == 'my_constraint_1234'
+
+
+@pytest.mark.unit
+def test_get_create_command_twice_with_no_name():
+    u = UniqueConstraint(['A', 'B'], ['y'])
+    assert u.get_create_command() == u.get_create_command()
