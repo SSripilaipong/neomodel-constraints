@@ -32,13 +32,13 @@ def test_get_update_commands():
     create1 = UniqueConstraint(['A', 'B'], ['x'])
     create2 = UniqueConstraint(['C', 'D'], ['p'])
 
-    keep1 = UniqueConstraint(['E'], ['x'])
-    keep2 = UniqueConstraint(['E'], ['q'])
-    keep3 = UniqueConstraint(['C'], ['p'])
-    keep4 = UniqueConstraint(['A'], ['q'])
+    keep1 = UniqueConstraint(['E'], ['x'], name='keep1')
+    keep2 = UniqueConstraint(['E'], ['q'], name='keep2')
+    keep3 = UniqueConstraint(['C'], ['p'], name='keep3')
+    keep4 = UniqueConstraint(['A'], ['q'], name='keep4')
 
-    drop1 = UniqueConstraint(['C'], ['y'])
-    drop2 = UniqueConstraint(['E', 'B'], ['x'])
+    drop1 = UniqueConstraint(['C'], ['y'], name='drop1')
+    drop2 = UniqueConstraint(['E', 'B'], ['x'], name='drop2')
 
     extractor = DummyExtractor(ConstraintSet({
         keep1, keep2, keep3, keep4,
@@ -55,8 +55,8 @@ def test_get_update_commands():
 
     c1 = create1.get_create_command()
     c2 = create2.get_create_command()
-    d1 = drop1.get_create_command()
-    d2 = drop2.get_create_command()
+    d1 = drop1.get_drop_command()
+    d2 = drop2.get_drop_command()
 
     assert set(commands) == {c1, c2, d1, d2}
 
