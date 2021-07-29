@@ -136,6 +136,7 @@ def test_from_raw():
         'labels': ['A', 'B'],
         'properties': ['x', 'y'],
         'name': 'CCC',
+        'extra_field': 'should be fine',
     }
     constraint = UniqueConstraint.from_raw(raw)
     assert all([
