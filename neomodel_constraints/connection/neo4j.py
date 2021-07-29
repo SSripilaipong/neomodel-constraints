@@ -24,7 +24,7 @@ class Neo4jConnection(ConnectionAbstract):
             self.driver.close()
 
     def execute(self, command: str) -> List[Dict]:
-        if self.driver:
+        if not self.driver:
             raise DBExecutionError('Not connected')
 
         session = None
