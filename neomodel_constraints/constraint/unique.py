@@ -53,7 +53,8 @@ class UniqueConstraint(ConstraintAbstract):
         optional = {'name'}
         keys = set(data.keys())
 
-        assert keys & required == required
-        assert keys & (required | optional) == keys
+        assert keys.issuperset(required)
+        keys_filtered = keys & (required | optional)
+        data_filtered = {k: v for k, v in data.items() if k in keys_filtered}
 
-        return UniqueConstraint(**data)
+        return UniqueConstraint(**data_filtered)
