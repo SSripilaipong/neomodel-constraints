@@ -10,15 +10,22 @@ class UniqueConstraint(ConstraintAbstract):
         self.properties: Set[str] = set(properties)
         self.name: Optional[str] = name
 
-    def get_create_command(self) -> str:
+    def get_create_command(self, *, name=None) -> str:
         if len(self.properties) != 1:
             raise NotImplementedError('Currently only 1 property is supported.')
 
         prop = list(self.properties)[0]
         labels_str = ':'.join(list(self.labels))
-        name = self.name if self.name else 'cstr_unique_' + uuid.uuid4().hex
 
-        return f'CREATE CONSTRAINT {name} ON (n:{labels_str}) ASSERT n.{prop} IS UNIQUE'
+        if self.name:
+            if name:
+                raise ValueError(f'Constraint name already exists: {self.name}')
+        elif name:
+            self.name = name
+        else:
+            self.name = 'cstr_unique_' + uuid.uuid4().hex
+
+        return f'CREATE CONSTRAINT {self.name} ON (n:{labels_str}) ASSERT n.{prop} IS UNIQUE'
 
     def get_drop_command(self) -> str:
         if self.name is None:
