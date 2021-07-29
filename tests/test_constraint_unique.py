@@ -133,7 +133,7 @@ def test_hash_dummy_with_same_data():
 @pytest.mark.unit
 def test_from_raw():
     raw = {
-        'labels': ['A', 'B'],
+        'labels_or_types': ['A', 'B'],
         'properties': ['x', 'y'],
         'name': 'CCC',
         'extra_field': 'should be fine',
@@ -142,7 +142,7 @@ def test_from_raw():
     assert all([
         constraint.name == raw['name'],
         constraint.properties == set(raw['properties']),
-        constraint.labels == set(raw['labels']),
+        constraint.labels == set(raw['labels_or_types']),
     ])
 
 
