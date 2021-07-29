@@ -10,9 +10,10 @@ from .data import ExtractedConstraintRecord, ConstraintType
 
 
 class NeomodelExtractor(ExtractorAbstract):
-    def __init__(self, path: str, type_mapper: TypeMapperAbstract):
+    def __init__(self, path: str, type_mapper: TypeMapperAbstract, multi_labels: bool = False):
         self.path: str = path
         self.type_mapper: TypeMapperAbstract = type_mapper
+        self.multi_labels: bool = multi_labels
 
     def get_models(self) -> Set[Type[Union[StructuredNode, StructuredRel]]]:
         models = importlib.import_module(self.path)
@@ -28,12 +29,12 @@ class NeomodelExtractor(ExtractorAbstract):
         props: List[Tuple[str, Property]] = model.__all_properties__
         return {name: prop for name, prop in props}
 
-    @staticmethod
-    def list_labels(model: Type[StructuredNode]) -> Set[str]:
+    def list_labels(self, model: Type[StructuredNode]) -> Set[str]:
         labels = {model.__label__}
-        for parent in model.mro():
-            if issubclass(parent, StructuredNode) and parent != StructuredNode:
-                labels.add(parent.__label__)
+        if self.multi_labels:
+            for parent in model.mro():
+                if issubclass(parent, StructuredNode) and parent != StructuredNode:
+                    labels.add(parent.__label__)
         return labels
 
     def extract_raw(self, model: Type[StructuredNode]) -> List[ExtractedConstraintRecord]:
@@ -51,7 +52,7 @@ class NeomodelExtractor(ExtractorAbstract):
         if record.type_ == ConstraintType.UNIQUE_INDEX:
             constraint_type = self.type_mapper.map('UNIQUENESS')
             raw = {
-                'labels': record.labels,
+                'labels_or_types': record.labels,
                 'properties': [record.name],
             }
             return ConstraintSet({constraint_type.from_raw(raw)})
