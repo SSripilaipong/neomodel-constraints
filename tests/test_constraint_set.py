@@ -76,7 +76,7 @@ def test_get_create_command_from_nonempty_set():
     b = DummyConstraint(3, 4)
     s = ConstraintSet([a, b])
 
-    assert s.get_create_commands() == [a.get_create_command(), b.get_create_command()]
+    assert set(s.get_create_commands()) == {a.get_create_command(), b.get_create_command()}
 
 
 @pytest.mark.unit
@@ -91,4 +91,4 @@ def test_get_drop_command_from_nonempty_set():
     b = DummyConstraint(3, 4)
     s = ConstraintSet([a, b])
 
-    assert s.get_drop_commands() == [a.get_drop_command(), b.get_drop_command()]
+    assert set(s.get_drop_commands()) == {a.get_drop_command(), b.get_drop_command()}
