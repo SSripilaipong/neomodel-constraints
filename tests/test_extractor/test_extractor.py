@@ -104,7 +104,7 @@ def test_list_labels_of_subclass():
     extractor = NeomodelExtractor('tests.test_extractor.models', DummyTypeMapper())
     labels = extractor.list_labels(SubclassWithUniqueString)
 
-    assert labels == {'SubclassWithUniqueString', 'UniqueIdWithRelation'}
+    assert labels == {'SubclassWithUniqueString'}
 
 
 @pytest.mark.unit
@@ -143,8 +143,8 @@ def test_extract_module():
         DummyConstraint({'labels_or_types': {'UniqueIdAndUniqueString'}, 'properties': ['u1']}),
         DummyConstraint({'labels_or_types': {'UniqueIdAndUniqueString'}, 'properties': ['u2']}),
         DummyConstraint({'labels_or_types': {'UniqueIdWithRelation'}, 'properties': ['u1']}),
-        DummyConstraint({'labels_or_types': {'SubclassWithUniqueString', 'UniqueIdWithRelation'}, 'properties': ['u1']}),
-        DummyConstraint({'labels_or_types': {'SubclassWithUniqueString', 'UniqueIdWithRelation'}, 'properties': ['u2']}),
+        DummyConstraint({'labels_or_types': {'SubclassWithUniqueString'}, 'properties': ['u1']}),
+        DummyConstraint({'labels_or_types': {'SubclassWithUniqueString'}, 'properties': ['u2']}),
     })
 
     assert constraints == expected
