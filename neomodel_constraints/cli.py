@@ -7,6 +7,7 @@ from neomodel_constraints.extractor import NeomodelExtractor
 from neomodel_constraints.constraint import Neo4jConstraintTypeMapper
 from neomodel_constraints.connection import Neo4jConnection
 from neomodel_constraints.fetcher import ConstraintsFetcher
+from neomodel_constraints.manager import ConstraintManager
 
 
 @click.group()
@@ -20,7 +21,7 @@ def extract(path, cypher_create_all):
     type_mapper = Neo4jConstraintTypeMapper()
 
     sys.path.insert(0, os.getcwd())
-    extractor = NeomodelExtractor(path, type_mapper)
+    extractor = NeomodelExtractor(path.lstrip('.'), type_mapper)
     constraints = extractor.extract()
     sys.path = sys.path[1:]
 
@@ -45,6 +46,31 @@ def fetch(uri, username, password, db, cypher_drop_all):
         click.echo(';\n'.join(constraints.get_drop_commands())+';')
     else:
         click.echo('\n'.join(list(map(str, constraints))))
+
+
+@main.command()
+@click.argument('path')
+@click.argument('neo4j_uri')
+@click.option('--username', required=True)
+@click.option('--password', required=True, prompt=True, hide_input=True)
+@click.option('--db', default=None)
+@click.option('--dry-run', is_flag=True)
+def update(path, neo4j_uri, username, password, db, dry_run):
+    sys.path.insert(0, os.getcwd())
+
+    type_mapper = Neo4jConstraintTypeMapper()
+    extractor = NeomodelExtractor(path.lstrip('.'), type_mapper)
+
+    with Neo4jConnection(neo4j_uri, username, password, db=db) as connection:
+        fetcher = ConstraintsFetcher(connection, type_mapper)
+        manager = ConstraintManager(extractor, fetcher)
+
+        if dry_run:
+            click.echo(';\n'.join(manager.get_update_commands())+';')
+        else:
+            raise NotImplementedError()
+
+    sys.path = sys.path[1:]
 
 
 main.add_command(fetch, 'fetch')
