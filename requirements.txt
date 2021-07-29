@@ -1,3 +1,4 @@
 neomodel>=4.0.0,<4.1.0
 neo4j-driver>=4.3.0,<4.4.0
 pydantic>=1.8.0,<1.9.0
+click>=8.0.0,<8.1.0
