@@ -1,3 +1,4 @@
+from types import ModuleType
 from typing import Type, Union, Set, Dict, List, Tuple
 import importlib
 
@@ -11,15 +12,31 @@ from .data import ExtractedConstraintRecord, ConstraintType
 
 class NeomodelExtractor(ExtractorAbstract):
     def __init__(self, path: str, type_mapper: TypeMapperAbstract, multi_labels: bool = False):
-        self.path: str = path
+        path_tokens: List[str] = path.split(':')
+        self.module_path: str = path_tokens[0]
+        self.submodule_path: str = path_tokens[1] if len(path_tokens) > 1 else None
         self.type_mapper: TypeMapperAbstract = type_mapper
         self.multi_labels: bool = multi_labels
 
-    def get_models(self) -> Set[Type[Union[StructuredNode, StructuredRel]]]:
-        models = importlib.import_module(self.path)
+    def get_module(self) -> ModuleType:
+        return importlib.import_module(self.module_path)
+
+    def get_submodule_or_model(self, module: ModuleType) -> Union[ModuleType, StructuredNode]:
+        path = self.submodule_path or ''
+
+        submodule = module
+        for s in path.split('.'):
+            if not s:
+                continue
+            submodule = getattr(submodule, s)
+
+        return submodule
+
+    @staticmethod
+    def get_models(module: ModuleType) -> Set[Type[Union[StructuredNode, StructuredRel]]]:
         results = set()
-        for name in dir(models):
-            obj = getattr(models, name)
+        for name in dir(module):
+            obj = getattr(module, name)
             if isinstance(obj, type) and issubclass(obj, StructuredNode):
                 results.add(obj)
         return results
@@ -60,7 +77,13 @@ class NeomodelExtractor(ExtractorAbstract):
         raise NotImplementedError()
 
     def extract(self) -> ConstraintSet:
-        models = self.get_models()
+        module = self.get_module()
+        module_or_model = self.get_submodule_or_model(module)
+        if isinstance(module_or_model, type) and issubclass(module_or_model, StructuredNode):
+            models = {module_or_model}
+        else:
+            module_or_model: ModuleType
+            models = self.get_models(module_or_model)
 
         records: List[ExtractedConstraintRecord] = []
         for model in models:
