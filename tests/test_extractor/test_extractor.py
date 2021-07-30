@@ -64,6 +64,16 @@ def test_get_module():
 
 
 @pytest.mark.unit
+def test_get_submodule_or_model_model_inside_module():
+    from tests.test_extractor import models as module
+    from tests.test_extractor.models.f1 import UniqueIdAndUniqueString as Expected
+
+    extractor = NeomodelExtractor('tests.test_extractor.models:f1.UniqueIdAndUniqueString', DummyTypeMapper())
+    submodule = extractor.get_submodule_or_model(module)
+    assert submodule == Expected
+
+
+@pytest.mark.unit
 def test_get_submodule_or_model_module():
     from tests.test_extractor import models as module
     from tests.test_extractor.models import f1 as expected
