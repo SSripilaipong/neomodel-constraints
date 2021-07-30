@@ -45,11 +45,42 @@ class DummyTypeMapper(TypeMapperAbstract):
 
 @pytest.mark.unit
 def test_list_all_models_in_module():
+    from tests.test_extractor import models as module
+
     extractor = NeomodelExtractor('tests.test_extractor.models', DummyTypeMapper())
-    models = extractor.get_models()
+    models = extractor.get_models(module)
     expected = {'UniqueIdAndUniqueString', 'NoUnique', 'UniqueIdWithRelation',
                 'SubclassWithUniqueString', 'NoUniqueAlone'}
     assert {m.__name__ for m in models} == expected
+
+
+@pytest.mark.unit
+def test_get_module():
+    from tests.test_extractor import models as expected
+
+    extractor = NeomodelExtractor('tests.test_extractor.models', DummyTypeMapper())
+    module = extractor.get_module()
+    assert module == expected
+
+
+@pytest.mark.unit
+def test_get_submodule_or_model_module():
+    from tests.test_extractor import models as module
+    from tests.test_extractor.models import f1 as expected
+
+    extractor = NeomodelExtractor('tests.test_extractor.models:f1', DummyTypeMapper())
+    submodule = extractor.get_submodule_or_model(module)
+    assert submodule == expected
+
+
+@pytest.mark.unit
+def test_get_submodule_or_model_model():
+    from tests.test_extractor import models as module
+    from tests.test_extractor.models import UniqueIdAndUniqueString as Expected
+
+    extractor = NeomodelExtractor('tests.test_extractor.models:UniqueIdAndUniqueString', DummyTypeMapper())
+    model = extractor.get_submodule_or_model(module)
+    assert model == Expected
 
 
 @pytest.mark.unit
