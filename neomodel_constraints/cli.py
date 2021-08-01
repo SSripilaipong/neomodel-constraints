@@ -65,10 +65,19 @@ def update(path, neo4j_uri, username, password, db, dry_run):
         fetcher = ConstraintsFetcher(connection, type_mapper)
         manager = ConstraintManager(extractor, fetcher)
 
-        if dry_run:
-            click.echo(';\n'.join(manager.get_update_commands())+';')
+        update_commands = manager.get_update_commands()
+        if not update_commands:
+            click.echo('Already up-to-date')
+        elif dry_run:
+            click.echo(';\n'.join(update_commands)+';')
         else:
-            raise NotImplementedError()
+            for cmd in update_commands:
+                click.echo('executing: ' + cmd)
+                try:
+                    connection.execute(cmd+';')
+                    click.echo('    success')
+                except Exception as e:
+                    click.echo('    error: ' + str(e))
 
     sys.path = sys.path[1:]
 
