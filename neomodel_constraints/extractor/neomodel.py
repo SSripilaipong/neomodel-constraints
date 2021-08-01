@@ -37,7 +37,7 @@ class NeomodelExtractor(ExtractorAbstract):
         results = set()
         for name in dir(module):
             obj = getattr(module, name)
-            if isinstance(obj, type) and issubclass(obj, StructuredNode):
+            if isinstance(obj, type) and issubclass(obj, StructuredNode) and obj != StructuredNode:
                 results.add(obj)
         return results
 
