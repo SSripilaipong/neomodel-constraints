@@ -19,12 +19,7 @@ class NeomodelExtractor(ExtractorAbstract):
         self.multi_labels: bool = multi_labels
 
     def get_module(self) -> ModuleType:
-        path = []
-        module = None
-        for m in self.module_path.split('.'):
-            path.append(m)
-            module = importlib.import_module('.'.join(path))
-        return module
+        return importlib.import_module(self.module_path)
 
     def get_submodule_or_model(self, module: ModuleType) -> Union[ModuleType, StructuredNode]:
         path = self.submodule_path or ''
