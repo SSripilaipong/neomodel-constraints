@@ -1,7 +1,7 @@
-import neomodel as nm
+from neomodel import *
 
 
-class UniqueIdAndUniqueString(nm.StructuredNode):
-    u1 = nm.UniqueIdProperty()
-    u2 = nm.StringProperty(unique_index=True)
-    x1 = nm.StringProperty()
+class UniqueIdAndUniqueString(StructuredNode):
+    u1 = UniqueIdProperty()
+    u2 = StringProperty(unique_index=True)
+    x1 = StringProperty()

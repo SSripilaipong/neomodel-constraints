@@ -55,6 +55,16 @@ def test_list_all_models_in_module():
 
 
 @pytest.mark.unit
+def test_list_all_models_in_module_with_StructuredNode():
+    from tests.test_extractor.models import f1 as module
+
+    extractor = NeomodelExtractor('tests.test_extractor.models.f1', DummyTypeMapper())
+    models = extractor.get_models(module)
+    expected = {'UniqueIdAndUniqueString'}
+    assert {m.__name__ for m in models} == expected
+
+
+@pytest.mark.unit
 def test_get_module():
     from tests.test_extractor import models as expected
 
