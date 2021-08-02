@@ -6,7 +6,7 @@ with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
 NAME = 'neomodel-constraints'
-VERSION = '0.0.15'
+VERSION = '0.0.16'
 URL = 'https://github.com/SSripilaipong/neomodel-constraints'
 LICENSE = 'MIT'
 AUTHOR = 'SSripilaipong'
