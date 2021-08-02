@@ -2,8 +2,9 @@ from typing import Dict, Type
 import pytest
 
 from neomodel_constraints import (
-    ConstraintsFetcher, DummyConnection, Neo4jConstraintQueryRecord, ConstraintAbstract, ConstraintSet,
+    DummyConnection, Neo4jConstraintQueryRecord, ConstraintAbstract, ConstraintSet,
 )
+from neomodel_constraints import ConstraintsFetcherV4s2 as ConstraintsFetcher
 from neomodel_constraints.constraint import TypeMapperAbstract
 
 
