@@ -6,8 +6,17 @@ import click
 from neomodel_constraints.extractor import NeomodelExtractor
 from neomodel_constraints.constraint import Neo4jConstraintTypeMapper
 from neomodel_constraints.connection import Neo4jConnection
-from neomodel_constraints.fetcher import ConstraintsFetcher
+from neomodel_constraints.fetcher import ConstraintsFetcherV4s2, ConstraintsFetcherV4s1, ConstraintsFetcherAbstract
 from neomodel_constraints.manager import ConstraintManager
+
+
+def get_fetcher(connection: Neo4jConnection, type_mapper: Neo4jConstraintTypeMapper) -> ConstraintsFetcherAbstract:
+    version = connection.version()
+    if version >= ("4", "2", "0"):
+        fetcher = ConstraintsFetcherV4s2(connection, type_mapper)
+    else:
+        fetcher = ConstraintsFetcherV4s1(connection, type_mapper)
+    return fetcher
 
 
 @click.group()
@@ -40,7 +49,7 @@ def extract(path, cypher_create_all):
 def fetch(uri, username, password, db, cypher_drop_all):
     type_mapper = Neo4jConstraintTypeMapper()
     with Neo4jConnection(uri, username, password, db=db) as connection:
-        fetcher = ConstraintsFetcher(connection, type_mapper)
+        fetcher = get_fetcher(connection, type_mapper)
         constraints = fetcher.fetch()
     if cypher_drop_all:
         click.echo(';\n'.join(constraints.get_drop_commands())+';')
@@ -62,7 +71,7 @@ def update(path, neo4j_uri, username, password, db, dry_run):
     extractor = NeomodelExtractor(path.lstrip('.'), type_mapper)
 
     with Neo4jConnection(neo4j_uri, username, password, db=db) as connection:
-        fetcher = ConstraintsFetcher(connection, type_mapper)
+        fetcher = get_fetcher(connection, type_mapper)
         manager = ConstraintManager(extractor, fetcher)
 
         update_commands = manager.get_update_commands()
