@@ -1,4 +1,4 @@
-from typing import Optional, List, Dict
+from typing import Optional, List, Dict, Tuple
 from neo4j import GraphDatabase, Driver
 
 from .abstract import ConnectionAbstract, DBExecutionError
@@ -12,6 +12,10 @@ class Neo4jConnection(ConnectionAbstract):
         self.db: str = db
 
         self.driver: Optional[Driver] = None
+
+    def version(self) -> Tuple[str]:
+        records = self.execute('CALL dbms.components() yield versions;')
+        return tuple(records[0]['versions'][0].split('.'))
 
     def is_connected(self) -> bool:
         return bool(self.driver)
