@@ -1,5 +1,8 @@
 from .connection import ConnectionAbstract, DummyConnection
 from .constraint import ConstraintAbstract, ConstraintSet, Neo4jConstraintTypeMapper, UniqueConstraint
-from .fetcher import ConstraintsFetcherAbstract, ConstraintsFetcher, Neo4jConstraintQueryRecord
+from .fetcher import (
+    ConstraintsFetcherAbstract, ConstraintsFetcher, ConstraintsFetcherV4s1, ConstraintsFetcherV4s2,
+    Neo4jConstraintQueryRecord,
+)
 from .extractor import NeomodelExtractor
 from .manager import ConstraintManager
