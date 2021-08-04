@@ -3,10 +3,10 @@ from typing import List, Dict
 
 from neomodel_constraints.connection import ConnectionAbstract
 from neomodel_constraints.constraint import ConstraintSet, TypeMapperAbstract
-
 from neomodel_constraints.fetcher.abstract import FetcherAbstract
-from neomodel_constraints.fetcher.constraints.data import Neo4jConstraintQueryRecord
-from neomodel_constraints.fetcher.constraints.util import convert_constraints_with_type_mapper
+
+from .data import Neo4jConstraintQueryRecord
+from .util import convert_constraints_with_type_mapper
 
 
 def extract_record_detail(detail: str) -> Dict:
