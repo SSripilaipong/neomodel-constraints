@@ -1,7 +1,7 @@
 from typing import Union, Type
 
-from .fetcher_4_2 import ConstraintsFetcherV4s2
-from .fetcher_4_1 import ConstraintsFetcherV4s1
+from neomodel_constraints.fetcher.constraints.fetcher_4_2 import ConstraintsFetcherV4s2
+from neomodel_constraints.fetcher.constraints.fetcher_4_1 import ConstraintsFetcherV4s1
 
 
 ConstraintsFetcher = ConstraintsFetcherV4s2
