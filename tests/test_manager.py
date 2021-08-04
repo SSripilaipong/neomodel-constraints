@@ -1,7 +1,7 @@
 import pytest
 
 from neomodel_constraints.extractor import ExtractorAbstract
-from neomodel_constraints.fetcher import ConstraintsFetcherAbstract
+from neomodel_constraints.fetcher import FetcherAbstract
 from neomodel_constraints import ConstraintSet, UniqueConstraint, ConstraintManager
 
 
@@ -13,7 +13,7 @@ class DummyExtractor(ExtractorAbstract):
         return self.results
 
 
-class DummyFetcher(ConstraintsFetcherAbstract):
+class DummyFetcher(FetcherAbstract):
     def __init__(self, result: ConstraintSet):
         self.result: ConstraintSet = result
 

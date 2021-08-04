@@ -4,7 +4,7 @@ from typing import List, Dict
 from neomodel_constraints.connection import ConnectionAbstract
 from neomodel_constraints.constraint import ConstraintSet, TypeMapperAbstract
 
-from .abstract import ConstraintsFetcherAbstract
+from .abstract import FetcherAbstract
 from .data import Neo4jConstraintQueryRecord
 from .util import convert_constraints_with_type_mapper
 
@@ -27,7 +27,7 @@ def extract_record_detail(detail: str) -> Dict:
     }
 
 
-class ConstraintsFetcherV4s1(ConstraintsFetcherAbstract):
+class ConstraintsFetcherV4s1(FetcherAbstract):
     def __init__(self, connection: ConnectionAbstract, type_mapper: TypeMapperAbstract):
         self.connection: ConnectionAbstract = connection
         self.type_mapper: TypeMapperAbstract = type_mapper

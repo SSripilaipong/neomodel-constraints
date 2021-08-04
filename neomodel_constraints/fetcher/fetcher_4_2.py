@@ -3,11 +3,11 @@ from typing import List
 from neomodel_constraints.connection import ConnectionAbstract
 from neomodel_constraints.constraint import ConstraintSet, TypeMapperAbstract, ConstraintAbstract
 
-from .abstract import ConstraintsFetcherAbstract
+from .abstract import FetcherAbstract
 from .data import Neo4jConstraintQueryRecord
 
 
-class ConstraintsFetcherV4s2(ConstraintsFetcherAbstract):
+class ConstraintsFetcherV4s2(FetcherAbstract):
     def __init__(self, connection: ConnectionAbstract, type_mapper: TypeMapperAbstract):
         self.connection: ConnectionAbstract = connection
         self.type_mapper: TypeMapperAbstract = type_mapper

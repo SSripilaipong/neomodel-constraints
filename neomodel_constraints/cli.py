@@ -6,16 +6,13 @@ import click
 from neomodel_constraints.extractor import NeomodelExtractor
 from neomodel_constraints.constraint import Neo4jConstraintTypeMapper
 from neomodel_constraints.connection import Neo4jConnection
-from neomodel_constraints.fetcher import ConstraintsFetcherV4s2, ConstraintsFetcherV4s1, ConstraintsFetcherAbstract
+from neomodel_constraints.fetcher import FetcherAbstract, get_constraints_fetcher
 from neomodel_constraints.manager import ConstraintManager
 
 
-def get_fetcher(connection: Neo4jConnection, type_mapper: Neo4jConstraintTypeMapper) -> ConstraintsFetcherAbstract:
+def get_fetcher(connection: Neo4jConnection, type_mapper: Neo4jConstraintTypeMapper) -> FetcherAbstract:
     version = connection.version()
-    if version >= ("4", "2", "0"):
-        fetcher = ConstraintsFetcherV4s2(connection, type_mapper)
-    else:
-        fetcher = ConstraintsFetcherV4s1(connection, type_mapper)
+    fetcher = get_constraints_fetcher(version)(connection, type_mapper)
     return fetcher
 
 

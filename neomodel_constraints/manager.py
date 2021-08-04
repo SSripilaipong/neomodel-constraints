@@ -1,11 +1,11 @@
 from .extractor import ExtractorAbstract
-from .fetcher import ConstraintsFetcherAbstract
+from .fetcher import FetcherAbstract
 
 
 class ConstraintManager:
-    def __init__(self, extractor: ExtractorAbstract, fetcher: ConstraintsFetcherAbstract):
+    def __init__(self, extractor: ExtractorAbstract, fetcher: FetcherAbstract):
         self.extractor: ExtractorAbstract = extractor
-        self.fetcher: ConstraintsFetcherAbstract = fetcher
+        self.fetcher: FetcherAbstract = fetcher
 
     def get_update_commands(self):
         to_be = self.extractor.extract()
