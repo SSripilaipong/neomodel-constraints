@@ -23,3 +23,8 @@ class ConstraintsFetcherV4s2(ConstraintsFetcherAbstract):
             constraint = constraint_type.from_raw(record.dict())
             constraints.add(constraint)
         return ConstraintSet(constraints)
+
+    def fetch(self) -> ConstraintSet:
+        raw: List[Neo4jConstraintQueryRecord] = self._fetch_raw_data()
+        constraints: ConstraintSet = self._convert_constraints(raw)
+        return constraints

@@ -17,12 +17,6 @@ class DummyFetcher(ConstraintsFetcherAbstract):
     def __init__(self, result: ConstraintSet):
         self.result: ConstraintSet = result
 
-    def _fetch_raw_data(self):  # not used
-        pass
-
-    def _convert_constraints(self, raw):  # not used
-        pass
-
     def fetch(self) -> ConstraintSet:
         return self.result
 

@@ -39,3 +39,8 @@ class ConstraintsFetcherV4s1(ConstraintsFetcherAbstract):
 
     def _convert_constraints(self, raw: List[Neo4jConstraintQueryRecord]) -> ConstraintSet:
         return convert_constraints_with_type_mapper(raw, self.type_mapper)
+
+    def fetch(self) -> ConstraintSet:
+        raw: List[Neo4jConstraintQueryRecord] = self._fetch_raw_data()
+        constraints: ConstraintSet = self._convert_constraints(raw)
+        return constraints
