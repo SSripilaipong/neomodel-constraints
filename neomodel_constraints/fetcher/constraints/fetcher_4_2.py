@@ -1,10 +1,10 @@
 from typing import List
 
 from neomodel_constraints.connection import ConnectionAbstract
-from neomodel_constraints.constraint import ConstraintSet, TypeMapperAbstract, ConstraintAbstract
+from neomodel_constraints.constraint import ConstraintSet, TypeMapperAbstract
 
 from neomodel_constraints.fetcher.abstract import FetcherAbstract
-from neomodel_constraints.fetcher.data import Neo4jConstraintQueryRecord
+from neomodel_constraints.fetcher.constraints.data import Neo4jConstraintQueryRecord
 
 
 class ConstraintsFetcherV4s2(FetcherAbstract):
