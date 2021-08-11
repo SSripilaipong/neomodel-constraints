@@ -32,3 +32,6 @@ class ConstraintSet(set):
 
     def __or__(self, other: 'ConstraintSet') -> 'ConstraintSet':
         return ConstraintSet(super().__or__(other))
+
+    def __iter__(self) -> Iterable[ConstraintAbstract]:
+        return super(ConstraintSet, self).__iter__()
