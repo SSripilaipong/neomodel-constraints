@@ -3,17 +3,24 @@ import sys
 
 import click
 
+from typing import List
+
 from neomodel_constraints.extractor import NeomodelExtractor
-from neomodel_constraints.constraint import Neo4jConstraintTypeMapper
+from neomodel_constraints.constraint import Neo4jConstraintTypeMapper, ConstraintSet
 from neomodel_constraints.connection import Neo4jConnection
-from neomodel_constraints.fetcher import FetcherAbstract, get_constraints_fetcher
+from neomodel_constraints.fetcher import FetcherAbstract, get_constraints_fetcher, get_indexes_fetcher
 from neomodel_constraints.manager import ConstraintManager
 
 
-def get_fetcher(connection: Neo4jConnection, type_mapper: Neo4jConstraintTypeMapper) -> FetcherAbstract:
+def get_fetchers(connection: Neo4jConnection, type_mapper: Neo4jConstraintTypeMapper) -> List[FetcherAbstract]:
     version = connection.version()
-    fetcher = get_constraints_fetcher(version)(connection, type_mapper)
-    return fetcher
+    constraint_fetcher = get_constraints_fetcher(version)(connection, type_mapper)
+    index_fetcher = get_indexes_fetcher(version)(connection, type_mapper)
+    fetchers = [
+        constraint_fetcher,
+        index_fetcher,
+    ]
+    return fetchers
 
 
 @click.group()
@@ -46,8 +53,10 @@ def extract(path, cypher_create_all):
 def fetch(uri, username, password, db, cypher_drop_all):
     type_mapper = Neo4jConstraintTypeMapper()
     with Neo4jConnection(uri, username, password, db=db) as connection:
-        fetcher = get_fetcher(connection, type_mapper)
-        constraints = fetcher.fetch()
+        fetchers = get_fetchers(connection, type_mapper)
+        constraints = ConstraintSet()
+        for fetcher in fetchers:
+            constraints |= fetcher.fetch()
     if cypher_drop_all:
         click.echo(';\n'.join(constraints.get_drop_commands())+';')
     else:
@@ -68,8 +77,8 @@ def update(path, neo4j_uri, username, password, db, dry_run):
     extractor = NeomodelExtractor(path.lstrip('.'), type_mapper)
 
     with Neo4jConnection(neo4j_uri, username, password, db=db) as connection:
-        fetcher = get_fetcher(connection, type_mapper)
-        manager = ConstraintManager(extractor, [fetcher])
+        fetchers = get_fetchers(connection, type_mapper)
+        manager = ConstraintManager(extractor, fetchers)
 
         update_commands = manager.get_update_commands()
         if not update_commands:
