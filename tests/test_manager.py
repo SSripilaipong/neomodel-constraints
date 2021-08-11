@@ -60,7 +60,7 @@ def test_get_update_commands():
 
 
 @pytest.mark.unit
-def test_get_update_commands():
+def test_get_update_commands_multiple_fetchers():
     create1 = UniqueConstraint(['A', 'B'], ['x'])
     create2 = UniqueConstraint(['C', 'D'], ['p'])
 
