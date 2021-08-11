@@ -44,7 +44,7 @@ def test_get_update_commands():
         drop1, drop2,
     }))
 
-    manager = ConstraintManager(extractor, fetcher)
+    manager = ConstraintManager(extractor, [fetcher])
     commands = manager.get_update_commands()
 
     c1 = create1.get_create_command()
