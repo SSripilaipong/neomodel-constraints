@@ -1,15 +1,21 @@
+from typing import List
+
+from .constraint import ConstraintSet
 from .extractor import ExtractorAbstract
 from .fetcher import FetcherAbstract
 
 
 class ConstraintManager:
-    def __init__(self, extractor: ExtractorAbstract, fetcher: FetcherAbstract):
+    def __init__(self, extractor: ExtractorAbstract, fetchers: List[FetcherAbstract]):
         self.extractor: ExtractorAbstract = extractor
-        self.fetcher: FetcherAbstract = fetcher
+        self.fetchers: List[FetcherAbstract] = fetchers
 
     def get_update_commands(self):
         to_be = self.extractor.extract()
-        existing = self.fetcher.fetch()
+
+        existing = ConstraintSet()
+        for fetcher in self.fetchers:
+            existing |= fetcher.fetch()
 
         to_create = to_be - existing
         to_drop = existing - to_be
