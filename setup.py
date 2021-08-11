@@ -11,7 +11,7 @@ URL = 'https://github.com/SSripilaipong/neomodel-constraints'
 LICENSE = 'MIT'
 AUTHOR = 'SSripilaipong'
 EMAIL = 'SHSnail@mail.com'
-CONSOLE_SCRIPT = 'nmcon=neomodel_constraints.cli:main'
+CONSOLE_SCRIPT = 'nmcon=cli:main'
 
 setup(
     name=NAME,
