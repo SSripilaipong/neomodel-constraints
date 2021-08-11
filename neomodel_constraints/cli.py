@@ -69,7 +69,7 @@ def update(path, neo4j_uri, username, password, db, dry_run):
 
     with Neo4jConnection(neo4j_uri, username, password, db=db) as connection:
         fetcher = get_fetcher(connection, type_mapper)
-        manager = ConstraintManager(extractor, fetcher)
+        manager = ConstraintManager(extractor, [fetcher])
 
         update_commands = manager.get_update_commands()
         if not update_commands:
