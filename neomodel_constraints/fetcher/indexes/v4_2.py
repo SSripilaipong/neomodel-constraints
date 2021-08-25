@@ -20,12 +20,12 @@ class IndexesOnlyFetcher(FetcherAbstract):
     def _convert_index(self, raw: List[Neo4jIndexQueryRecord]) -> ConstraintSet:
         constraints = set()
         for record in raw:
-            constraint_type = self.type_mapper.map(record.type_)
+            constraint_type = self.type_mapper.map('NODE_INDEX')
             constraint = constraint_type.from_raw(record.dict())
             constraints.add(constraint)
         return ConstraintSet(constraints)
 
     def fetch(self) -> ConstraintSet:
         raw: List[Neo4jIndexQueryRecord] = self._fetch_raw_data()
-        constraints: ConstraintSet[IndexesOnlyFetcherV4s2] = self._convert_index(raw)
+        constraints: ConstraintSet[IndexesOnlyFetcher] = self._convert_index(raw)
         return constraints

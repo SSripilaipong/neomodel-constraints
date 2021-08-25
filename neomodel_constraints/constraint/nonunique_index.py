@@ -4,7 +4,7 @@ from typing import Optional, Set, Dict, Iterable
 from .abstract import ConstraintAbstract
 
 
-class NodeIndexConstraint(ConstraintAbstract):
+class NonUniqueIndexConstraint(ConstraintAbstract):
     def __init__(self, labels: Iterable[str], properties: Iterable[str], *, name: str = None):
         self.labels: Set[str] = set(labels)
         self.properties: Set[str] = set(properties)
@@ -45,6 +45,6 @@ class NodeIndexConstraint(ConstraintAbstract):
         return labels_hash*2**3 + props_hash*3**3
 
     @classmethod
-    def from_raw(cls, data: Dict) -> 'NodeIndexConstraint':  # TODO
+    def from_raw(cls, data: Dict) -> 'NonUniqueIndexConstraint':  # TODO
         return cls(labels=data['labels_or_types'], properties=data['properties'],
                    name=data.get('name', None))

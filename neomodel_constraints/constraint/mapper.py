@@ -2,7 +2,7 @@ from typing import Type
 
 from .abstract import TypeMapperAbstract, ConstraintAbstract
 from .unique import UniqueConstraint
-from .node_index import NodeIndexConstraint
+from .nonunique_index import NonUniqueIndexConstraint
 
 
 class Neo4jConstraintTypeMapper(TypeMapperAbstract):
@@ -12,6 +12,6 @@ class Neo4jConstraintTypeMapper(TypeMapperAbstract):
         if type_ == 'UNIQUENESS':
             return UniqueConstraint
         elif type_ == 'NODE_INDEX':
-            return NodeIndexConstraint
+            return NonUniqueIndexConstraint
 
         raise NotImplementedError(f'type: "{type_}"')
