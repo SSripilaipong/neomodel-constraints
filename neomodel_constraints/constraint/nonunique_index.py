@@ -26,7 +26,7 @@ class NonUniqueIndexConstraint(ConstraintAbstract):
         else:
             self.name = 'index_node_' + uuid.uuid4().hex
 
-        return f'CREATE INDEX {self.name} FOR (n:{labels_str}) ON {props}'
+        return f'CREATE INDEX {self.name} FOR (n:{labels_str}) ON ({props})'
 
     def get_drop_command(self) -> str:  # TODO
         if self.name is None:

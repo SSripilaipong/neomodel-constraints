@@ -20,7 +20,7 @@ class IndexesOnlyFetcher(FetcherAbstract):
     def _convert_index(self, raw: List[Neo4jIndexQueryRecord]) -> ConstraintSet:
         constraints = set()
         for record in raw:
-            constraint_type = self.type_mapper.map('NODE_INDEX')
+            constraint_type = self.type_mapper.map('NONUNIQUE_INDEX')
             constraint = constraint_type.from_raw(record.dict())
             constraints.add(constraint)
         return ConstraintSet(constraints)

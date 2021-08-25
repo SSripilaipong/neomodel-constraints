@@ -11,7 +11,7 @@ class Neo4jConstraintTypeMapper(TypeMapperAbstract):
 
         if type_ == 'UNIQUENESS':
             return UniqueConstraint
-        elif type_ == 'NODE_INDEX':
+        elif type_ == 'NONUNIQUE_INDEX':
             return NonUniqueIndexConstraint
 
         raise NotImplementedError(f'type: "{type_}"')
