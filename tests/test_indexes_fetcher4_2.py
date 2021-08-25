@@ -4,7 +4,7 @@ import pytest
 from neomodel_constraints import (
     DummyConnection, Neo4jIndexQueryRecord, ConstraintAbstract, ConstraintSet,
 )
-from neomodel_constraints.fetcher.indexes.v4_2 import IndexesOnlyFetcher
+from neomodel_constraints.fetcher.v4_2 import IndexesOnlyFetcher
 from neomodel_constraints.constraint import TypeMapperAbstract
 
 

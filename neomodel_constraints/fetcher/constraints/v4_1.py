@@ -27,7 +27,7 @@ def extract_record_detail(detail: str) -> Dict:
     }
 
 
-class ConstraintsFetcherV4s1(FetcherAbstract):
+class ConstraintsFetcher(FetcherAbstract):
     def __init__(self, connection: ConnectionAbstract, type_mapper: TypeMapperAbstract):
         self.connection: ConnectionAbstract = connection
         self.type_mapper: TypeMapperAbstract = type_mapper

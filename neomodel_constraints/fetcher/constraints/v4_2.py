@@ -8,7 +8,7 @@ from .data import Neo4jConstraintQueryRecord
 from .util import convert_constraints_with_type_mapper
 
 
-class ConstraintsFetcherV4s2(FetcherAbstract):
+class ConstraintsFetcher(FetcherAbstract):
     def __init__(self, connection: ConnectionAbstract, type_mapper: TypeMapperAbstract):
         self.connection: ConnectionAbstract = connection
         self.type_mapper: TypeMapperAbstract = type_mapper

@@ -1,15 +1,14 @@
 from typing import Union, Type
 
-from .v4_2 import ConstraintsFetcherV4s2
-from .v4_1 import ConstraintsFetcherV4s1
+from . import v4_2, v4_1
 
 
-ConstraintsFetcher = ConstraintsFetcherV4s2
+ConstraintsFetcher = v4_2.ConstraintsFetcher
 
 
-def get_constraints_fetcher(version) -> Union[Type[ConstraintsFetcherV4s2], Type[ConstraintsFetcherV4s1]]:
+def get_constraints_fetcher(version) -> Union[Type[v4_2.ConstraintsFetcher], Type[v4_1.ConstraintsFetcher]]:
     if version >= ("4", "2", "0"):
-        fetcher = ConstraintsFetcherV4s2
+        fetcher = v4_2.ConstraintsFetcher
     else:
-        fetcher = ConstraintsFetcherV4s1
+        fetcher = v4_1.ConstraintsFetcher
     return fetcher
