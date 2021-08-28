@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from enum import Enum
 from pydantic import BaseModel, Field
 
@@ -11,6 +11,7 @@ class EntityType(str, Enum):
 class IndexType(str, Enum):
     BTREE: str = "BTREE"
     FULLTEXT: str = "FULLTEXT"
+    LOOKUP: str = "LOOKUP"
 
 
 class Uniqueness(str, Enum):
@@ -23,9 +24,9 @@ class Neo4jIndexQueryRecord(BaseModel):
     population_percent: float = Field(..., alias="populationPercent")
     type_: IndexType = Field(..., alias="type")
     entity_type: EntityType = Field(..., alias="entityType")
-    labels_or_types: List[str] = Field(..., alias="labelsOrTypes")
+    labels_or_types: Optional[List[str]] = Field(..., alias="labelsOrTypes")
     index_provider: str = Field(..., alias="indexProvider")
     name: str
-    properties: List[str]
+    properties: Optional[List[str]]
     state: str
     uniqueness: Uniqueness

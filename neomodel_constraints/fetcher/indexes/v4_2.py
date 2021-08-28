@@ -15,7 +15,10 @@ class IndexesOnlyFetcher(FetcherAbstract):
     def _fetch_raw_data(self) -> List[Neo4jIndexQueryRecord]:
         raw = self.connection.execute('SHOW INDEXES')
         records = [Neo4jIndexQueryRecord(**record) for record in raw]
-        return [r for r in records if r.uniqueness == 'NONUNIQUE']
+        return [r for r in records
+                if r.uniqueness == 'NONUNIQUE'
+                and r.type_ != 'LOOKUP'
+                and r.entity_type == 'NODE']
 
     def _convert_index(self, raw: List[Neo4jIndexQueryRecord]) -> ConstraintSet:
         constraints = set()
