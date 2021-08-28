@@ -81,6 +81,75 @@ def test_fetch_dummy_raw_data():
 
 
 @pytest.mark.unit
+def test_fetch_dummy_raw_data_with_lookup_type():
+    e = {
+        'id': 123,
+        'entityType': 'NODE',
+        'labelsOrTypes': ['Book'],
+        'name': 'constraint_1',
+        'type': 'LOOKUP',
+        'properties': ['isbn'],
+        'populationPercent': 100.0,
+        'indexProvider': 'native-btree-1.0',
+        'state': 'ONLINE',
+        'uniqueness': 'NONUNIQUE',
+    }
+
+    connection = DummyConnection([[e]])
+    f = IndexesOnlyFetcher(connection, DummyTypeMapper())
+
+    raw = f._fetch_raw_data()
+
+    assert raw == []
+
+
+@pytest.mark.unit
+def test_fetch_dummy_raw_data_with_relationship_entity():
+    e = {
+        'id': 123,
+        'entityType': 'RELATIONSHIP',
+        'labelsOrTypes': ['Book'],
+        'name': 'constraint_1',
+        'type': 'BTREE',
+        'properties': ['isbn'],
+        'populationPercent': 100.0,
+        'indexProvider': 'native-btree-1.0',
+        'state': 'ONLINE',
+        'uniqueness': 'NONUNIQUE',
+    }
+
+    connection = DummyConnection([[e]])
+    f = IndexesOnlyFetcher(connection, DummyTypeMapper())
+
+    raw = f._fetch_raw_data()
+
+    assert raw == []
+
+
+@pytest.mark.unit
+def test_fetch_dummy_raw_data_with_unique_constraint():
+    e = {
+        'id': 123,
+        'entityType': 'NODE',
+        'labelsOrTypes': ['Book'],
+        'name': 'constraint_1',
+        'type': 'BTREE',
+        'properties': ['isbn'],
+        'populationPercent': 100.0,
+        'indexProvider': 'native-btree-1.0',
+        'state': 'ONLINE',
+        'uniqueness': 'UNIQUE',
+    }
+
+    connection = DummyConnection([[e]])
+    f = IndexesOnlyFetcher(connection, DummyTypeMapper())
+
+    raw = f._fetch_raw_data()
+
+    assert raw == []
+
+
+@pytest.mark.unit
 def test_convert_uniqueness_records_to_constraint_set():
     a = {
         'id': 123,
