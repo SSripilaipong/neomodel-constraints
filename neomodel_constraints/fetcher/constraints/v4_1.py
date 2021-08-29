@@ -34,7 +34,7 @@ class ConstraintsFetcher(FetcherAbstract):
 
     def _fetch_raw_data(self) -> List[Neo4jConstraintQueryRecord]:
         raw = self.connection.execute('CALL db.constraints')
-        records = [extract_record_detail(record['detail']) for record in raw]
+        records = [extract_record_detail(record['details']) for record in raw]
         return [Neo4jConstraintQueryRecord(**record) for record in records]
 
     def _convert_constraints(self, raw: List[Neo4jConstraintQueryRecord]) -> ConstraintSet:
