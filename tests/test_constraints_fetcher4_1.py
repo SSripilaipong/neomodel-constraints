@@ -60,8 +60,8 @@ def test_fetch_dummy_raw_data():
         'name': 'cstr_unique_35f309fc1791440aa756bb3a2a7d8e52',
         'description': ('CONSTRAINT ON ( subclasswithuniquestring:SubclassWithUniqueString )'
                         'ASSERT (subclasswithuniquestring.u2) IS UNIQUE'),
-        'detail': ("Constraint( id=2, name='cstr_unique_35f309fc1791440aa756bb3a2a7d8e52', type='UNIQUENESS', "
-                   "schema=(:SubclassWithUniqueString {u2}), ownedIndex=1 )"),
+        'details': ("Constraint( id=2, name='cstr_unique_35f309fc1791440aa756bb3a2a7d8e52', type='UNIQUENESS', "
+                    "schema=(:SubclassWithUniqueString {u2}), ownedIndex=1 )"),
     }
     connection = DummyConnection([[e]])
     f = ConstraintsFetcher(connection, DummyTypeMapper())
@@ -128,15 +128,15 @@ def test_fetch():
         'name': a['name'],
         'description': (f'CONSTRAINT ON ( n:{a["labelsOrTypes"][0]} )'
                         f'ASSERT (n.{a["properties"][0]}) IS UNIQUE'),
-        'detail': (f"Constraint( id={a['id']}, name='{a['name']}', type='{a['type']}', "
-                   f"schema=(:{a['labelsOrTypes'][0]} {{{a['properties'][0]}}}), ownedIndex={a['ownedIndexId']} )"),
+        'details': (f"Constraint( id={a['id']}, name='{a['name']}', type='{a['type']}', "
+                    f"schema=(:{a['labelsOrTypes'][0]} {{{a['properties'][0]}}}), ownedIndex={a['ownedIndexId']} )"),
     }
     be = {
         'name': b['name'],
         'description': (f'CONSTRAINT ON ( n:{b["labelsOrTypes"][0]} )'
                         f'ASSERT (n.{b["properties"][0]}) IS UNIQUE'),
-        'detail': (f"Constraint( id={b['id']}, name='{b['name']}', type='{b['type']}', "
-                   f"schema=(:{b['labelsOrTypes'][0]} {{{b['properties'][0]}}}), ownedIndex={b['ownedIndexId']} )"),
+        'details': (f"Constraint( id={b['id']}, name='{b['name']}', type='{b['type']}', "
+                    f"schema=(:{b['labelsOrTypes'][0]} {{{b['properties'][0]}}}), ownedIndex={b['ownedIndexId']} )"),
     }
     f = ConstraintsFetcher(DummyConnection([[ae, be]]), DummyTypeMapper())
     result = f.fetch()
