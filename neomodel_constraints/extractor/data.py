@@ -6,6 +6,7 @@ from pydantic import BaseModel
 
 class ConstraintType(str, Enum):
     UNIQUE_INDEX = 'UNIQUE_INDEX'
+    INDEX_ONLY = 'INDEX_ONLY'
 
 
 class ExtractedConstraintRecord(BaseModel):

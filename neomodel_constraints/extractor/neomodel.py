@@ -63,18 +63,24 @@ class NeomodelExtractor(ExtractorAbstract):
             if prop.unique_index:
                 record = ExtractedConstraintRecord(name=name, type_=ConstraintType.UNIQUE_INDEX, labels=labels)
                 records.append(record)
+            if prop.index:
+                record = ExtractedConstraintRecord(name=name, type_=ConstraintType.INDEX_ONLY, labels=labels)
+                records.append(record)
         return records
 
     def convert_constraints(self, record: ExtractedConstraintRecord) -> ConstraintSet:
         if record.type_ == ConstraintType.UNIQUE_INDEX:
             constraint_type = self.type_mapper.map('UNIQUENESS')
-            raw = {
-                'labels_or_types': record.labels,
-                'properties': [record.name],
-            }
-            return ConstraintSet({constraint_type.from_raw(raw)})
+        elif record.type_ == ConstraintType.INDEX_ONLY:
+            constraint_type = self.type_mapper.map('NONUNIQUE_INDEX')
+        else:
+            raise NotImplementedError()
 
-        raise NotImplementedError()
+        raw = {
+            'labels_or_types': record.labels,
+            'properties': [record.name],
+        }
+        return ConstraintSet({constraint_type.from_raw(raw)})
 
     def extract(self) -> ConstraintSet:
         module = self.get_module()
