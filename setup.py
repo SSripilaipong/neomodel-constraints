@@ -6,12 +6,12 @@ with open('requirements.txt') as f:
     requirements = f.read().splitlines()
 
 NAME = 'neomodel-constraints'
-VERSION = '0.0.16'
+VERSION = '0.0.19'
 URL = 'https://github.com/SSripilaipong/neomodel-constraints'
 LICENSE = 'MIT'
 AUTHOR = 'SSripilaipong'
 EMAIL = 'SHSnail@mail.com'
-CONSOLE_SCRIPT = 'nmcon=cli:main'
+CONSOLE_SCRIPT = 'nmcon=neomodel_constraints.cli:main'
 
 setup(
     name=NAME,
